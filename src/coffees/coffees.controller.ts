@@ -6,17 +6,17 @@ import {
   Post,
   HttpCode,
   HttpStatus,
-  Res,
   Patch,
   Delete,
+  Query,
 } from '@nestjs/common';
 
 @Controller('coffees')
 export class CoffeesController {
   @Get()
-  findAll(@Res() res) {
-    /** 使用底层express响应对象，不推荐，失去框架上层抽象意义 */
-    res.status(200).send('返回所有coffee');
+  findAll(@Query() paginationQuery) {
+    const { limit, offset } = paginationQuery;
+    return `This action return all coffees.Limit ${limit},offsets ${offset}`;
   }
 
   @Get(':id')
