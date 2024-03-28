@@ -9,6 +9,8 @@ import {
   Patch,
   Delete,
   Query,
+  HttpException,
+  NotFoundException,
 } from '@nestjs/common';
 import { CoffeesService } from './coffees.service';
 
@@ -32,8 +34,12 @@ export class CoffeesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    // return `返回#[${id}] coffee`;
-    return this.coffeesService.findOne(id);
+    const coffee = this.coffeesService.findOne(id);
+    if (!coffee) {
+      throw new NotFoundException(`Coffee #${id} not found`);
+    }
+
+    return coffee;
   }
 
   @Post()
