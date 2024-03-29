@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CoffeesModule } from './coffees/coffees.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   /**
@@ -9,7 +10,22 @@ import { CoffeesModule } from './coffees/coffees.module';
    * 依赖模块中exports出来的依赖可直接注入使用
    * 不用在providers中声明
    */
-  imports: [CoffeesModule],
+  imports: [
+    CoffeesModule,
+    /** typeorm连接数据库配置 */
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: '192.168.50.22',
+      port: 15432,
+      username: 'postgres',
+      password: 'pass123',
+      database: 'postgres',
+      /** 自动加载模块 */
+      autoLoadEntities: true,
+      /** 同步数据，确保typeorm实体在每次运行应用程序时都与数据库同步，生产禁用 */
+      synchronize: true,
+    }),
+  ],
   /** 此模块的控制器 */
   controllers: [AppController],
   /**
