@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Flavor } from './flavor.entity/flavor.entity';
 
 /**
  * 每个用@Entity装饰的类都代表一个SQL表（SQL table）
@@ -19,7 +26,20 @@ export class Coffee {
   @Column()
   brand: string;
 
-  /** 标识floavors在数据中以json形式存储，并允许null */
-  @Column('json', { nullable: true })
+  /**
+   * 定义两个entity的relation
+   * @JoinTable一般定义在OWNER一侧
+   * 例如此处Coffee有多种口味（flavor）
+   * 所以JoinTable定义在Coffee entity即可，Flavor entity无需定义
+   * 每个Coffee可以有多个flavor
+   * 每个flavor也可以出现在多种Coffee中
+   */
+  @JoinTable()
+  @ManyToMany(
+    /** 指定关联的目标Entity类型 */
+    (type) => Flavor,
+    /** 指定目标Entity上与当前Entity关联的属性 */
+    (flavor) => flavor.coffees,
+  )
   flavors: string[];
 }
