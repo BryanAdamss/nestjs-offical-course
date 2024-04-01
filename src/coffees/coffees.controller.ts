@@ -10,6 +10,7 @@ import {
   Delete,
   Query,
   NotFoundException,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto/create-coffee.dto';
@@ -34,7 +35,7 @@ export class CoffeesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     const coffee = this.coffeesService.findOne(id);
     if (!coffee) {
       throw new NotFoundException(`Coffee #${id} not found`);
@@ -50,12 +51,15 @@ export class CoffeesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCoffeeDto: UpdateCoffeeDto) {
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateCoffeeDto: UpdateCoffeeDto,
+  ) {
     return this.coffeesService.update(id, updateCoffeeDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.coffeesService.remove(id);
   }
 }
