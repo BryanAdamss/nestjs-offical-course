@@ -10,6 +10,9 @@ async function bootstrap() {
       whitelist: true, // dto中未声明的属性会被过滤掉
       forbidNonWhitelisted: true, // 出现dto中未声明的属性时，抛400 BadRequest错误
       transform: true, // 转换数据类型，可将query、paramas转换为声明的类型
+      transformOptions: {
+        enableImplicitConversion: true, // 开启隐式转换，自动将query上的string转为dto中指定类型，就可以不用在dto中使用@Type()
+      },
     }),
   );
   await app.listen(3000);

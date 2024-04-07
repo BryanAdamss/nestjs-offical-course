@@ -1,5 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateCoffeeDto } from '../create-coffee.dto/create-coffee.dto';
+import { CreateCoffeeDto } from './create-coffee.dto';
 
 /**
  * 使用PartialType将继承CreateCoffeeDto的属性和所有验证pipe
