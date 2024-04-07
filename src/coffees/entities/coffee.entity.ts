@@ -5,7 +5,7 @@ import {
   ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Flavor } from './flavor.entity/flavor.entity';
+import { Flavor } from './flavor.entity';
 
 /**
  * 每个用@Entity装饰的类都代表一个SQL表（SQL table）
@@ -40,6 +40,9 @@ export class Coffee {
     (type) => Flavor,
     /** 指定目标Entity上与当前Entity关联的属性 */
     (flavor) => flavor.coffees,
+    {
+      cascade: true /** insert、update、remove时级联插入Flavor实体 */,
+    },
   )
-  flavors: string[];
+  flavors: Flavor[];
 }
