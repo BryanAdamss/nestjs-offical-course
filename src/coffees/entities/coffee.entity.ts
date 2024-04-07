@@ -26,6 +26,9 @@ export class Coffee {
   @Column()
   brand: string;
 
+  @Column({ default: 0 })
+  recommendations: number;
+
   /**
    * 定义两个entity的relation
    * @JoinTable一般定义在OWNER一侧
