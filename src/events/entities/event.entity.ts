@@ -1,5 +1,7 @@
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Index, PrimaryGeneratedColumn } from 'typeorm';
 
+/** 复合索引，组合多个列 */
+@Index(['name', 'type'])
 export class Event {
   @PrimaryGeneratedColumn()
   id: number;
@@ -7,6 +9,8 @@ export class Event {
   @Column()
   type: string;
 
+  /** 普通索引 */
+  @Index()
   @Column()
   name: string;
 
