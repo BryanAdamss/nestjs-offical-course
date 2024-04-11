@@ -7,7 +7,11 @@ import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { Flavor } from './entities/flavor.entity';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { Event } from '../events/entities/event.entity';
-import { COFFEE_BRANDS } from './coffees.constants';
+import {
+  COFFEE_BRANDS,
+  COFFEE_BRANDS_ASYNC,
+  COFFEE_BRANDS_WITH_FACTORY,
+} from './coffees.constants';
 
 @Injectable() /** Injectable标记此类是一个可被IoC容器管理的可注入类 */
 export class CoffeesService {
@@ -19,8 +23,12 @@ export class CoffeesService {
     private readonly flavorRepository: Repository<Flavor>,
     private readonly connection: Connection,
     @Inject(COFFEE_BRANDS) coffeeBrands: string[],
+    @Inject(COFFEE_BRANDS_WITH_FACTORY) coffeeBransWithFactory: string[],
+    @Inject(COFFEE_BRANDS_ASYNC) coffeeBransAsync: string[],
   ) {
     console.log('coffeeBrands :>> ', coffeeBrands);
+    console.log('coffeeBransWithFactory :>> ', coffeeBransWithFactory);
+    console.log('coffeeBransAsync :>> ', coffeeBransAsync);
   }
 
   findAll(paginationQuery: PaginationQueryDto) {
