@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Injectable, Module } from '@nestjs/common';
 import { CoffeesController } from './coffees.controller';
 import { CoffeesService } from './coffees.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -11,6 +11,14 @@ class ConfigService {}
 class DevelopmentConfigService {}
 class ProductionConfigService {}
 
+@Injectable()
+export class CoffeeBrandsFactory {
+  create() {
+    // do sth
+    return ['buddy brew', 'nescafe'];
+  }
+}
+
 @Module({
   imports: [
     /** 让typeorm知道CoffeeModule子模块内有哪些实体 */
@@ -19,9 +27,12 @@ class ProductionConfigService {}
   controllers: [CoffeesController],
   providers: [
     CoffeesService,
+    CoffeeBrandsFactory,
     {
       provide: COFFEE_BRANDS,
-      useValue: ['buddy brew', 'nescafe'],
+      inject: [CoffeeBrandsFactory],
+      useFactory: (brandsFactory: CoffeeBrandsFactory) =>
+        brandsFactory.create(),
     },
     {
       provide: ConfigService,
