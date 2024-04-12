@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { CoffeesModule } from './coffees/coffees.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
+import { DynamicExampleModule } from './dynamic-example/dynamic-example.module';
 
 @Module({
   /**
@@ -27,6 +28,12 @@ import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
       synchronize: true,
     }),
     CoffeeRatingModule,
+    /** 调用动态模块的静态方法实现注册 */
+    DynamicExampleModule.register({
+      type: 'postgres',
+      host: 'localhost',
+      port: 123,
+    }),
   ],
   /** 此模块的控制器 */
   controllers: [AppController],
