@@ -48,7 +48,7 @@ export class CoffeeBrandsFactory {
       provide: COFFEE_BRANDS_ASYNC,
       inject: [Connection],
       useFactory: async (connection: Connection): Promise<string[]> => {
-        console.log('connection :>> ', connection);
+        console.log('connection :>> ', connection.driver.treeSupport);
         console.log('async factory');
         const coffeeBrands = await Promise.resolve(['coffee brands async']);
         return coffeeBrands;

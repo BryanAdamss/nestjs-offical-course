@@ -5,6 +5,7 @@ import { CoffeesModule } from './coffees/coffees.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
 import { DynamicExampleModule } from './dynamic-example/dynamic-example.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   /**
@@ -13,15 +14,22 @@ import { DynamicExampleModule } from './dynamic-example/dynamic-example.module';
    * 不用在providers中声明
    */
   imports: [
+    /** 默认从根目录查找.env文件 */
+    ConfigModule.forRoot({
+      /** 同名key，前面覆盖后面 */
+      // envFilePath: ['.env', '.env.local', '.env.production'],
+      /** 不用.env配置时，可设置为true */
+      // ignoreEnvFile:true
+    }),
     CoffeesModule,
     /** typeorm连接数据库配置 */
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: '192.168.50.22',
-      port: 15432,
-      username: 'postgres',
-      password: 'pass123',
-      database: 'postgres',
+      host: process.env.DATABASE_HOST,
+      port: +process.env.DATABASE_PORT,
+      username: process.env.DATABASE_USER,
+      password: process.env.DATABASE_PASSWORD,
+      database: process.env.DATABASE_NAME,
       /** 自动加载模块 */
       autoLoadEntities: true,
       /** 同步数据，确保typeorm实体在每次运行应用程序时都与数据库同步，生产禁用 */
