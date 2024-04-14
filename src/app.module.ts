@@ -7,6 +7,7 @@ import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
 import { DynamicExampleModule } from './dynamic-example/dynamic-example.module';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
+import appConfig from './config/app.config';
 
 @Module({
   /**
@@ -26,6 +27,8 @@ import * as Joi from 'joi';
         DATABASE_HOST: Joi.required(),
         DATABASE_PORT: Joi.number().default(5432),
       }),
+      /** 加载自定义配置 */
+      load: [appConfig],
     }),
     CoffeesModule,
     /** typeorm连接数据库配置 */

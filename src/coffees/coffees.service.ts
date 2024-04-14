@@ -41,6 +41,10 @@ export class CoffeesService {
       `this.configService.get<string>('DATABASE_HOST');`,
       databaseHost,
     );
+
+    /** 使用点语法加载自定义配置 */
+    const customDatabaseHost = this.configService.get('database.port');
+    console.log('customDatabaseHost :>> ', customDatabaseHost);
   }
 
   findAll(paginationQuery: PaginationQueryDto) {
