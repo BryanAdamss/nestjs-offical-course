@@ -12,7 +12,10 @@ import {
   COFFEE_BRANDS_ASYNC,
   COFFEE_BRANDS_WITH_FACTORY,
 } from './coffees.constants';
-import { ConfigService } from '@nestjs/config';
+import { ConfigService, ConfigType } from '@nestjs/config';
+import coffeesConfig from './config/coffees.config';
+
+type CoffeesConfigType = ConfigType<typeof coffeesConfig>;
 
 @Injectable() /** Injectable标记此类是一个可被IoC容器管理的可注入类 */
 export class CoffeesService {
@@ -27,6 +30,10 @@ export class CoffeesService {
     @Inject(COFFEE_BRANDS_WITH_FACTORY) coffeeBransWithFactory: string[],
     @Inject(COFFEE_BRANDS_ASYNC) coffeeBransAsync: string[],
     private readonly configService: ConfigService,
+
+    /** 使用Inject注入命名空间配置对象 */
+    @Inject(coffeesConfig.KEY)
+    private readonly coffeesConfiguration: CoffeesConfigType,
   ) {
     console.log('coffeeBrands :>> ', coffeeBrands);
     console.log('coffeeBransWithFactory :>> ', coffeeBransWithFactory);
@@ -45,6 +52,16 @@ export class CoffeesService {
     /** 使用点语法加载自定义配置 */
     const customDatabaseHost = this.configService.get('database.port');
     console.log('customDatabaseHost :>> ', customDatabaseHost);
+
+    /** 输出命名空间中的配置 */
+    const coffeesConfig = this.configService.get('coffees');
+    console.log('coffeesConfig :>> ', coffeesConfig);
+    /** 输出命名空间中的配置，使用点语法输出嵌套配置 */
+    const coffeesConfigFoo = this.configService.get('coffees.foo');
+    console.log('coffeesConfigFoo :>> ', coffeesConfigFoo);
+
+    /** 有提示，且类型安全 */
+    console.log('coffeesConfiguration :>> ', coffeesConfiguration.foo);
   }
 
   findAll(paginationQuery: PaginationQueryDto) {

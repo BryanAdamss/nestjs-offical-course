@@ -12,6 +12,7 @@ import {
 } from './coffees.constants';
 import { Connection } from 'typeorm';
 import { ConfigModule } from '@nestjs/config';
+import coffeesConfig from './config/coffees.config';
 
 class ConfigService {}
 class DevelopmentConfigService {}
@@ -29,7 +30,8 @@ export class CoffeeBrandsFactory {
   imports: [
     /** 让typeorm知道CoffeeModule子模块内有哪些实体 */
     TypeOrmModule.forFeature([Coffee, Flavor, Event]),
-    ConfigModule,
+    /** 加载coffees特有的配置 */
+    ConfigModule.forFeature(coffeesConfig),
   ],
   controllers: [CoffeesController],
   providers: [
