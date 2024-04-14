@@ -12,6 +12,7 @@ import {
   COFFEE_BRANDS_ASYNC,
   COFFEE_BRANDS_WITH_FACTORY,
 } from './coffees.constants';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable() /** Injectable标记此类是一个可被IoC容器管理的可注入类 */
 export class CoffeesService {
@@ -25,10 +26,21 @@ export class CoffeesService {
     @Inject(COFFEE_BRANDS) coffeeBrands: string[],
     @Inject(COFFEE_BRANDS_WITH_FACTORY) coffeeBransWithFactory: string[],
     @Inject(COFFEE_BRANDS_ASYNC) coffeeBransAsync: string[],
+    private readonly configService: ConfigService,
   ) {
     console.log('coffeeBrands :>> ', coffeeBrands);
     console.log('coffeeBransWithFactory :>> ', coffeeBransWithFactory);
     console.log('coffeeBransAsync :>> ', coffeeBransAsync);
+
+    const databaseHost = this.configService.get<string>(
+      'DATABASE_HOST',
+      /** 默认值 */
+      'default_host',
+    );
+    console.log(
+      `this.configService.get<string>('DATABASE_HOST');`,
+      databaseHost,
+    );
   }
 
   findAll(paginationQuery: PaginationQueryDto) {
