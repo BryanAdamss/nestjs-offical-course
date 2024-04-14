@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
 import { DynamicExampleModule } from './dynamic-example/dynamic-example.module';
 import { ConfigModule } from '@nestjs/config';
+import * as Joi from 'joi';
 
 @Module({
   /**
@@ -20,6 +21,11 @@ import { ConfigModule } from '@nestjs/config';
       // envFilePath: ['.env', '.env.local', '.env.production'],
       /** 不用.env配置时，可设置为true */
       // ignoreEnvFile:true
+      /** 默认情况下，所有config的key都是optional，可通过joi设置为required */
+      validationSchema: Joi.object({
+        DATABASE_HOST: Joi.required(),
+        DATABASE_PORT: Joi.number().default(5432),
+      }),
     }),
     CoffeesModule,
     /** typeorm连接数据库配置 */
