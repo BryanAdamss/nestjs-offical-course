@@ -5,7 +5,7 @@ import { CoffeesModule } from './coffees/coffees.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
 import { DynamicExampleModule } from './dynamic-example/dynamic-example.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 import appConfig from './config/app.config';
 
@@ -16,6 +16,23 @@ import appConfig from './config/app.config';
    * 不用在providers中声明
    */
   imports: [
+    /** 使用异步方法，规避加载顺序问题 */
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get('DATABASE_HOST'),
+        port: configService.get('DATABASE_PORT'),
+        username: configService.get('DATABASE_USER'),
+        password: configService.get('DATABASE_PASSWORD'),
+        database: configService.get('DATABASE_NAME'),
+        /** 自动加载模块 */
+        autoLoadEntities: true,
+        /** 同步数据，确保typeorm实体在每次运行应用程序时都与数据库同步，生产禁用 */
+        synchronize: true,
+      }),
+    }),
     /** 默认从根目录查找.env文件 */
     ConfigModule.forRoot({
       /** 同名key，前面覆盖后面 */
@@ -32,18 +49,7 @@ import appConfig from './config/app.config';
     }),
     CoffeesModule,
     /** typeorm连接数据库配置 */
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DATABASE_HOST,
-      port: +process.env.DATABASE_PORT,
-      username: process.env.DATABASE_USER,
-      password: process.env.DATABASE_PASSWORD,
-      database: process.env.DATABASE_NAME,
-      /** 自动加载模块 */
-      autoLoadEntities: true,
-      /** 同步数据，确保typeorm实体在每次运行应用程序时都与数据库同步，生产禁用 */
-      synchronize: true,
-    }),
+
     CoffeeRatingModule,
     /** 调用动态模块的静态方法实现注册 */
     DynamicExampleModule.register({
