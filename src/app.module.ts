@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
 import { DynamicExampleModule } from './dynamic-example/dynamic-example.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CommonModule } from './common/common.module';
 import * as Joi from 'joi';
 import appConfig from './config/app.config';
 
@@ -57,6 +58,8 @@ import appConfig from './config/app.config';
       host: 'localhost',
       port: 123,
     }),
+    /** 公用模块，用来实例化全局的增强器，如全局守卫 */
+    CommonModule,
   ],
   /** 此模块的控制器 */
   controllers: [AppController],
