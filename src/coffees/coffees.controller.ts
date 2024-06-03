@@ -11,7 +11,6 @@ import {
   Query,
   NotFoundException,
   ParseIntPipe,
-  SetMetadata,
 } from '@nestjs/common';
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';

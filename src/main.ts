@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { WrapResponseInterceptor } from './common/interceptors/wrap-response.interceptor';
+import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 // import { ApiKeyGuard } from './common/guards/api-key.guard';
 
 async function bootstrap() {
@@ -16,6 +18,10 @@ async function bootstrap() {
         enableImplicitConversion: true, // 开启隐式转换，自动将query上的string转为dto中指定类型，就可以不用在dto中使用@Type()
       },
     }),
+  );
+  app.useGlobalInterceptors(
+    new WrapResponseInterceptor(),
+    new TimeoutInterceptor(),
   );
   app.useGlobalFilters(new HttpExceptionFilter());
   // 在common.module中创建了ApiKeyGuard
