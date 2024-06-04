@@ -18,7 +18,10 @@ import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { Public } from 'src/common/decorators/public.decorator';
 import { Protocol } from 'src/common/decorators/protocol.decorator';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
+/** 告诉swagger将coffees控制器下的所有方法都组织到coffees下 */
+@ApiTags('coffees')
 @Controller('coffees')
 export class CoffeesController {
   /**
@@ -41,6 +44,8 @@ export class CoffeesController {
     return this.coffeesService.findAll(paginationQuery);
   }
 
+  /** 给swagger添加额外信息，下面的也可简写为@ApiForbiddenResponse({description:"无权限"}) */
+  @ApiResponse({ status: 403, description: '无权限' })
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     const coffee = this.coffeesService.findOne(id);
