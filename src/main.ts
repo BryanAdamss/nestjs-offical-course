@@ -4,6 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { WrapResponseInterceptor } from './common/interceptors/wrap-response.interceptor';
 import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 // import { ApiKeyGuard } from './common/guards/api-key.guard';
 
 async function bootstrap() {
@@ -26,6 +27,17 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   // 在common.module中创建了ApiKeyGuard
   // app.useGlobalGuards(new ApiKeyGuard());
+
+  /** 集成swagger */
+  const options = new DocumentBuilder()
+    .setTitle('Iluvcoffee')
+    .setDescription('Coffee app')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, options);
+  /** 指定访问路由为/api，默认port是app的服务端口3000，所以通过localhost:3000/api即可访问swagger */
+  SwaggerModule.setup('api', app, document);
+
   await app.listen(3000);
 }
 bootstrap();
