@@ -9,6 +9,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CommonModule } from './common/common.module';
 import * as Joi from 'joi';
 import appConfig from './config/app.config';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   /**
@@ -60,6 +61,7 @@ import appConfig from './config/app.config';
     }),
     /** 公用模块，用来实例化全局的增强器，如全局守卫 */
     CommonModule,
+    MongooseModule.forRoot('mongodb://localhost:27017/nest-course'),
   ],
   /** 此模块的控制器 */
   controllers: [AppController],
